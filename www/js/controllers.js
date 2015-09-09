@@ -27,12 +27,15 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('ScannerCtrl', function($scope, $cordovaBarcodeScanner) {
+.controller('ScannerCtrl', function($scope, $cordovaBarcodeScanner, CodigosService) {
   $scope.scan = function(){
-    $cordovaBarcodeScanner
+
+      
+   $cordovaBarcodeScanner
       .scan()
       .then(function(barcodeData) {
-        console.log("escanee");
+              
+      CodigosService.getInfo(barcodeData);
       }, function(error) {
         console.log("no pude escanear", error);
       });

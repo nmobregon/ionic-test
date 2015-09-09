@@ -47,4 +47,17 @@ angular.module('starter.services', [])
       return null;
     }
   };
-});
+})
+
+.factory('CodigosService', ['xmlrpc', function(xmlrpc){
+    return {
+        getInfo: function(data){
+            xmlrpc.callMethod("http://www.upcdatabase.com/xmlrpc", ["b457b1dbb42db3cc12bfacdd2445808c49d71abe",data])
+            .then(function(response){
+                console.log(response); // { attr1:..., attr2:...}
+            });
+        }
+    }
+}])
+
+;
