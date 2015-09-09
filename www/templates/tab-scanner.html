@@ -1,7 +1,13 @@
 <ion-view view-title="Escanear Código de Barras">
-	<ion-content class="has-header">
+	<ion-content class="has-header" style="height:70%">
     
-		<div id="map" data-tap-disabled="true"></div>
+		<ui-gmap-google-map center='map.center' zoom='map.zoom'>
+			<ui-gmap-marker
+				idKey='marker.idKey'
+				coords='marker.coords'
+				>
+		</ui-gmap-marker>
+		</ui-gmap-google-map>
 		
 	</ion-content>
 </ion-view>

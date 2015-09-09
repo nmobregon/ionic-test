@@ -29,12 +29,10 @@ angular.module('starter.controllers', [])
 
 .controller('ScannerCtrl', function($scope, $cordovaBarcodeScanner, $cordovaGeolocation, $cordovaToast, $ionicLoading) {
  
-    $cordovaBarcodeScanner
-      .scan()
-      .then(function(barcodeData) { 
-			 
-			//$cordovaToast.show('Codigo Leido', 'short', 'center'); 
-			
+     // $cordovaBarcodeScanner
+       // .scan()
+       // .then(function(barcodeData) { 
+					
 			var posOptions = {timeout: 10000, enableHighAccuracy: true};
 			
 			$cordovaGeolocation
@@ -44,48 +42,14 @@ angular.module('starter.controllers', [])
 					var lat  = position.coords.latitude;
 					var lon = position.coords.longitude;
 					
-					//$cordovaToast.show(lat + ", " + lon, 'short', 'center');
-					
-					var myLatlng = new google.maps.LatLng(lat, lon);
-
-					var mapOptions = {
-						center: myLatlng,
-						zoom: 16,
-						mapTypeId: google.maps.MapTypeId.ROADMAP
-					};
-					var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-					$scope.map = map;
-				
-					$ionicLoading.show({
-					  content: 'Getting current location...',
-					  showBackdrop: false
-					});
-					
-					$scope.map.setCenter(new google.maps.LatLng(lat, lon));
-					var marker = new google.maps.Marker({
-						position: myLatlng,
-						map: map,
-						title: barcodeData.text
-					});
-
-					//Marker + infowindow + angularjs compiled ng-click
-					var contentString = "<div>"+barcodeData.text+"</div>";
-
-					var infowindow = new google.maps.InfoWindow({
-						content: contentString
-					});
-					
-					google.maps.event.addListener(marker, 'click', function() {
-						infowindow.open(map, marker);
-					});
-					
-					$ionicLoading.hide()	
+					$scope.map = { center: { latitude: lat, longitude: lon }, zoom: 12 };
+					$scope.marker = {idKey: 1, coords:{ latitude: lat, longitude: lon }};
 									  
 				}, function(err) {
-					//$cordovaToast.show('errorr', 'long', 'center');
+					$cordovaToast.show('errorr', 'long', 'center');
 				});
 	 		
-       }, function(error) {
-			console.log("no pude escanear", error);
-      });  
+       // }, function(error) {
+			// console.log("no pude escanear", error);
+      // });  
 });
