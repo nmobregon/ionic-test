@@ -8,7 +8,7 @@ try {
 /**
  * XML-RPC communication service.
  */
-angular.module('Dashboards.services')
+angular.module('starter.services')
 .factory('xmlrpc', ['$http', 'helperXmlRpc', 'js2xml', 'xml2js', function($http, helperXmlRpc, js2xml, xml2js){
     var configuration = {};
 

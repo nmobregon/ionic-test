@@ -2,7 +2,7 @@
  * Service providing a converter between XML and JS.
  * Useful to communicate with XML-RPC.
  */
-angular.module('Dashboards.services')
+angular.module('starter.services')
 .factory('js2xml', ['helperXmlRpc', function(helperXmlRpc){
     /**
      * Convert Null to XmlRpc valid value (as xml element)
