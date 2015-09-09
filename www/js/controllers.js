@@ -27,17 +27,65 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('ScannerCtrl', function($scope, $cordovaBarcodeScanner, CodigosService) {
-  $scope.scan = function(){
-
-      
-   $cordovaBarcodeScanner
+.controller('ScannerCtrl', function($scope, $cordovaBarcodeScanner, $cordovaGeolocation, $cordovaToast, $ionicLoading) {
+ 
+    $cordovaBarcodeScanner
       .scan()
-      .then(function(barcodeData) {
-              
-      CodigosService.getInfo(barcodeData);
-      }, function(error) {
-        console.log("no pude escanear", error);
-      });
-  };
+      .then(function(barcodeData) { 
+			 
+			//$cordovaToast.show('Codigo Leido', 'short', 'center'); 
+			
+			var posOptions = {timeout: 10000, enableHighAccuracy: true};
+			
+			$cordovaGeolocation
+				.getCurrentPosition(posOptions)
+				.then(function (position) {
+					
+					var lat  = position.coords.latitude;
+					var lon = position.coords.longitude;
+					
+					//$cordovaToast.show(lat + ", " + lon, 'short', 'center');
+					
+					var myLatlng = new google.maps.LatLng(lat, lon);
+
+					var mapOptions = {
+						center: myLatlng,
+						zoom: 16,
+						mapTypeId: google.maps.MapTypeId.ROADMAP
+					};
+					var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+					$scope.map = map;
+				
+					$ionicLoading.show({
+					  content: 'Getting current location...',
+					  showBackdrop: false
+					});
+					
+					$scope.map.setCenter(new google.maps.LatLng(lat, lon));
+					var marker = new google.maps.Marker({
+						position: myLatlng,
+						map: map,
+						title: barcodeData.text
+					});
+
+					//Marker + infowindow + angularjs compiled ng-click
+					var contentString = "<div>"+barcodeData.text+"</div>";
+
+					var infowindow = new google.maps.InfoWindow({
+						content: contentString
+					});
+					
+					google.maps.event.addListener(marker, 'click', function() {
+						infowindow.open(map, marker);
+					});
+					
+					$ionicLoading.hide()	
+									  
+				}, function(err) {
+					//$cordovaToast.show('errorr', 'long', 'center');
+				});
+	 		
+       }, function(error) {
+			console.log("no pude escanear", error);
+      });  
 });
